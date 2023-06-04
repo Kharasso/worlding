@@ -1,9 +1,9 @@
 {
-  "name": "test",
+  "name": "wip",
   "version": "1.0.0",
   "license": "MIT",
   "idyll": {
-    "theme": "idyll",
+    "theme": "default",
     "layout": "centered",
     "css": "styles.css",
     "authorView": false
@@ -15,11 +15,16 @@
     "publish": "idyll publish"
   },
   "dependencies": {
-    "d3": "7",
+    "curve-store": "^1.1.2",
+    "d3": "^4.13.0",
     "d3-selection": "^2.0.0",
     "d3-transition": "^2.0.0",
-    "idyll": "6.0.0-alpha.4",
-    "idyll-d3-component": "^2.0.0"
+    "gaussian": "^1.1.0",
+    "idyll": "^5.0.0",
+    "idyll-d3-component": "^2.0.0",
+    "node-fetch": "^2.6.7",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0"
   },
   "devDependencies": {
     "@babel/standalone": "^7.22.4",

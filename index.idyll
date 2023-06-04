@@ -1,125 +1,150 @@
-[meta title:"Test" description:"Short description of your project" /]
+[meta title:"Wip" description:"Short description of your project" /]
 
 [Header
   fullWidth:true
-  title:"Test"
+  title:"Wip"
   subtitle:"Welcome to Idyll. Open index.idyll to start writing"
   author:"Your Name Here"
   authorLink:"https://idyll-lang.org"
-  date:"May 31, 2023"
+  date:"Jun 4, 2023"
   background:"#222222"
   color:"#ffffff"
    /]
 
-[var name:"x" value:0 /]
-
 ## Introduction
 
-This is an Idyll post. It is generated via
+This is an Idyll scrolly-telling post. It is generated via
 the file `index.idyll`. To compile this post using
 idyll, run the command `idyll` inside of this directory.
-
 
 Idyll posts are designed to support interaction and
 data-driven graphics.
 
-[var name:"state" value:0 /]
-[CustomD3Component className:"d3-component" state:state /]
-[CustomComponent className:"component" state:state /]
-[button onClick:`state++`]
-  Click Me.
-[/button]
-
 Configuration can be done via the `idyll` field in `package.json`.
 
-## Markup
+[var name:"state" value:0 /]
 
-Idyll is based on Markdown.
+[Scroller currentStep:state]
 
-You can use familiar syntax
-to create **bold** (`**bold**` ) and *italic* (`*italic*` ) styles,
+  [Graphic className:"d3-component-container"]
+    [CustomD3Component className:"d3-component" state:`state+1` /]
+  [/Graphic]
+
+  [Step]
+
+    ## Markup
+
+    Idyll is based on Markdown.
+
+    You can use familiar syntax
+    to create **bold** (`**bold**` ) and *italic* (`*italic*` ) styles,
 
 * lists
 * of
 * items,
 
-```
-* lists
-* of
-* items,
-```
+    ```
+    * lists
+    * of
+    * items,
+    ```
 
 1. and numbered
 2. lists
 3. of items,
 
 
-```
-1. and numbered
-2. lists
-3. of items,
-```
+    ```
+    1. and numbered
+    2. lists
+    3. of items,
+    ```
 
-in addition to [hyperlinks](https://idyll-lang.org) and images:
+    in addition to [hyperlinks](https://idyll-lang.org) and images:
 
-![quill](static/images/quill.svg)
+    ![quill](static/images/quill.svg)
 
-```
-![quill](static/images/quill.svg)
-```
+    ```
+    ![quill](static/images/quill.svg)
+    ```
+  [/Step]
 
-## Components
+  [Step]
+    ## Components
 
-Components can be embedded using a bracket syntax:
+    Components can be embedded using a bracket syntax:
 
-```
-[Range /]
-```
+    ```
+    [Range /]
+    ```
 
-and can contain nested content:
+    and can contain nested content:
 
-```
-[Equation]e = mc^{2}[/Equation]
-```
+    ```
+    [Equation]e = mc^{2}[/Equation]
+    ```
 
-Components accept properties:
+    Components accept properties:
 
-```
-[Range value:x min:0 max:1 /]
-```
+    ```
+    [Range value:x min:0 max:1 /]
+    ```
 
-that can be bound to variables to achieve interactivity (more in next section).
-
-
-A variety of components are included by default. See [all the available components](https://idyll-lang.org/docs/components/). You can also use any html tag, for example: `[div] A div! [/div]`.
-
-To create your own, add it to the `components/` folder. There are examples of how to use Idyll with React and D3 based components already included.
+    that can be bound to variables to achieve interactivity (more in next section).
 
 
+    A variety of components are included by default. See [all the available components](https://idyll-lang.org/docs/components/). You can also use any html tag, for example: `[div] A div! [/div]`.
 
-## Interactivity
+    To create your own, add it to the `components/` folder. There are examples of how to use Idyll with React and D3 based components already included.
 
-Here is how you can instantiate a variable and bind it to a component:
+  [/Step]
 
-[var name:"exampleVar" value:5 /]
+  [Step]
+    ## Interactivity
 
-[Range min:0 max:10 value:exampleVar /]
-[Display value:exampleVar /]
+    Here is how you can instantiate a variable and bind it to a component:
 
-```
-[var name:"exampleVar" value:5 /]
+    [var name:"exampleVar" value:5 /]
 
-[Range min:0 max:10 value:exampleVar /]
-[Display value:exampleVar /]
-```
+    [Range min:0 max:10 value:exampleVar /]
+    [Display value:exampleVar /]
 
-## Learn More
+    ```
+    [var name:"exampleVar" value:5 /]
 
-To learn more see the documentation at [https://idyll-lang.org/docs/](https://idyll-lang.org/docs/),
-join our [chatroom](https://gitter.im/idyll-lang/Lobby), or see the project on [GitHub](https://github.com/idyll-lang/idyll).
+    [Range min:0 max:10 value:exampleVar /]
+    [Display value:exampleVar /]
+    ```
+  [/Step]
 
-[hr /]
+[/Scroller]
 
+[Scroller]
+
+  [Step]
+
+    ##Scroller
+
+    The `Scroller` component is used to create scroll-based presentations. It can be used to create scrollytelling articles similar to this.
+    It takes a property `currentStep` which is updated when the user scrolls to a different step.
+
+    A persistent graphic may also provided using the `Graphic` component in order to create visualizations.
+
+  [/Step]
+
+  [Step]
+
+    ## Learn More
+
+    To learn more see the documentation at [https://idyll-lang.org/docs/](https://idyll-lang.org/docs/),
+    join our [chatroom](https://gitter.im/idyll-lang/Lobby), or see the project on [GitHub](https://github.com/idyll-lang/idyll).
+  [hr /]
+
+  [/Step]
+
+[/Scroller]
+
+[br/]
 # Technical Details
 
 ## Installation
