@@ -1,469 +1,198 @@
-// import React from 'react';
-// const D3Component = require('idyll-d3-component');
-// const d3 = require('d3');
-// const size = 600;
-
-// class CustomD3Component extends D3Component {
-//   initialize(node, props) {
-//     const svg = (this.svg = d3.select(node).append('svg'));
-//     svg
-//       .attr('viewBox', `0 0 ${size} ${size}`)
-//       .style('width', '100%')
-//       .style('height', 'auto');
-
-//     svg
-//       .append('circle')
-//       .attr('r', 20)
-//       .attr('cx', Math.random() * size)
-//       .attr('cy', Math.random() * size);
-//   }
-
-//   update(props, oldProps) {
-//     this.svg
-//       .selectAll('circle')
-//       .transition()
-//       .duration(750)
-//       .attr('cx', Math.random() * size)
-//       .attr('cy', Math.random() * size);
-//   }
-// }
-
 import React from 'react';
 const D3Component = require('idyll-d3-component');
 const d3 = require('d3');
+const size = 600;
 
-const { createStore } = require('curve-store');
-const { linear } = require('curve-store/lib/samplers');
+var n = 10, // number of layers
+m = 500, // number of samples per layer
+k = 12; // number of bumps per layer
 
-
-var gaussian = require('gaussian');
-var distribution = gaussian(0, 1);
-
-const BLUE = '#090C9B';
-const RED = '#B02E0C';
-
-// const width = 1200;
-// const height = 400;
-let r = 10;
-
-const store = createStore({
-  y: linear('y')
-});
-store.set(0, { y: 0 })
-store.set(1, { y: 0 })
-
-const pointCount = {};
-const points = [];
-const circles = [];
-const repeatTimeouts = [];
-
-
-const rand = () => {
-  return 1 - d3.randomLogNormal(-1.25, 0.65)();
-}
-const randomPrecision = (prec) => {
-  const p = Math.pow(10, prec);
-  return Math.round(rand() * p) / p;
-}
 
 class CustomD3Component extends D3Component {
-
-    kernelDensityEstimator(kernel, X) {
-      // console.log(kernel, X);
-      // console.log('ticks', X);
-      return function(V) {
-        return X.map(function(x) {
-          // console.log('mean', d3.mean(V, function(v) {
-            // console.log(x, v, kernel(x - v));
-            // return kernel(x - v);
-          // }))
-          return [x, d3.mean(V, function(v) { return kernel(x - v); })];
-        });
-      };
-    }
-
-    kernelTriangular(k) {
-      return function(v) {
-        if (v / k < 0 && v / k > -1) {
-          return v/k+1;
-        } else if (v / k > 0.0 && v / k < 1) {
-          return -v/k + 1;
-        }
-        if (v / k === 0) {
-          return 1;
-        }
-        return 0;
-      }
-    }
-
-    kernelUniform(k) {
-      return function(v) {
-        if (v / k > 1.0 || v / k < -1.0) {
-          return 0;
-        }
-        return 0.5;
-      }
-    }
-    kernelGaussian(k) {
-      return function(v) {
-        return distribution.pdf(v / k);
-      }
-    }
-
-    kernelEpanechnikov(k) {
-      return function(v) {
-        return Math.abs(v /= k) <= 1 ? 0.75 * (1 - v * v) / k : 0;
-      };
-    }
-
   initialize(node, props) {
-    // window.onbeforeunload = function () {
+    const svg = (this.svg = d3.select(node).append('svg'));
+
+    svg
+    .attr('viewBox', `0 -200 ${size} ${size}`)
+    .style('width', '100%')
+    .style('height', 'auto');
+
+    var width = window.innerWidth;
+    
+    // console.log(width);
+    var height = width * 0.45;
+
+    this.width = width;
+    this.height = height;
+    
+    // var n = 20, // number of layers
+    //     m = 500, // number of samples per layer
+    //     k = 10; // number of bumps per layer
+    
+    
+    // var stack = d3.stack().keys(d3.range(n)).offset(d3.stackOffsetWiggle),
+    //     layers0 = stack(d3.transpose(d3.range(n).map(function() { return bumps(m, k); }))),
+    //     layers1 = stack(d3.transpose(d3.range(n).map(function() { return bumps(m, k); }))),
+    //     layers = layers0.concat(layers1);
+    
+    // var svg = d3.select("svg"),
+    // width = +svg.attr("width"),
+    // height = +svg.attr("height");
+    // width = svg.attr("width"),
+    // height = svg.attr("height");
+    
+    var x = d3.scaleLinear([0, m - 1], [0, width]);
+    
+    var y = d3.scaleLinear([0, 1], [height, 0]);
+
+    // var z = d3.interpolateCool;
+    // var z = d3.interpolateBuPu;
+    var z = d3.interpolateGreys;
+    
+    var area = d3.area()
+      .x((d, i) => x(i))
+      .y0(d => 0.25 * y(d[0]))
+      .y1(d => 0.25 * y(d[1]))
+
+    // const offset = function offset () {
+    //   const options = [
+    //     {name: "d3.stackOffsetExpand", value: d3.stackOffsetExpand},
+    //     {name: "d3.stackOffsetNone", value: d3.stackOffsetNone},
+    //     {name: "d3.stackOffsetSilhouette", value: d3.stackOffsetSilhouette},
+    //     {name: "d3.stackOffsetWiggle", value: d3.stackOffsetWiggle, selected: true}
+    //   ];
+    //   const form = html`<form style="display: flex; align-items: center; min-height: 33px;"><select name=i>${options.map(o => Object.assign(html`<option>`, {textContent: o.name, selected: o.selected}))}`;
+    //   form.i.onchange = () => form.dispatchEvent(new CustomEvent("input"));
+    //   form.oninput = () => form.value = options[form.i.selectedIndex].value;
+    //   form.oninput();
+    //   return form;
     // }
-    window.scrollTo(0, 0);
 
-    this.fixPosition = false;
+    console.log(area);
 
-    this.showEstimate = false;
-    this.repeat = 1000;
+    var stack = d3.stack()
+    .keys(d3.range(n))
+    .offset(d3.stackOffsetWiggle)
+    .order(d3.stackOrderNone)
 
-    this.nx = 0.8;
-    this.hasShownEstimate = false;
+    const path = svg.selectAll("path")
+    .data(randomize)
+    .enter().append('path')
+      .attr("d", area)
+      .attr("fill", () => z(Math.random()))
+      .attr("opacity", 0.5);
 
-    const width = this.width = window.innerWidth;
-    const height = this.height = window.innerHeight;
-    const x = this.x = d3.scaleLinear().range([r, width - r]);
-    const y = this.y = d3.scaleLinear().range([r, height - r]);
+    function stackMax(layer) {
+      return d3.max(layer, function(d) { return d[1]; });
+    }
+    
+    function stackMin(layer) {
+      return d3.min(layer, function(d) { return d[0]; });
+    }
 
-    this.estimateY = d3.scaleLinear().domain([0, 10]).range([height - 2 * r, 2 * r]);
-    this.kernelScale = d3.scaleLinear().domain([0, 20]).range([height - 2 * r, 2 * r])
-    // this.estimateY = d3.scaleLinear().domain([0, 10]).range([height - r, r]);
-    // this.kernelScale = d3.scaleLinear().domain([0, 20]).range([height - r, r])
+    // function transition() {
+    //   var t;
+    //   d3.selectAll("path")
+    //     .data((t = layers1, layers1 = layers0, layers0 = t))
+    //     .transition()
+    //       .duration(2500)
+    //       .attr("d", area);
+    // }
 
-    this.distanceScale = d3.scaleLinear().domain([0, 10]).range(['#222', '#fff'])
-    this.indicatorScale = d3.scaleSqrt().domain([0, 15]).range([3, 7])
-
-    console.log(this.estimateY.range())
-
-    r = width / 100 / 2 - 2;
-
-    let svg = this.svg = d3.select(node).append('svg');
-    this.fullSVG = svg;
-    this.fullSVG.on('click', () => {
-      if(this.props.state === 'build-estimate') {
-        this.fixPosition = !this.fixPosition
+    function randomize() {
+      const layers = stack(d3.transpose(Array.from({length: n}, () => bumps(m, k))));
+      y.domain([
+        d3.min(layers, l => d3.min(l, d => d[0])),
+        d3.max(layers, l => d3.max(l, d => d[1]))
+      ]);
+      return layers;
+    }
+  
+    function bump(a, n) {
+      var x = 1 / (0.1 + Math.random()),
+          y = 2 * Math.random() - 0.5,
+          z = 10 / (0.1 + Math.random());
+      for (var i = 0; i < n; i++) {
+        var w = (i / n - y) * z;
+        a[i] += x * Math.exp(-w * w);
       }
-    });
-    svg.attr('viewBox', `0 0 ${width} ${height}`)
-      .style('width', '100%')
-      .style('height', 'auto')
-      .style('background', '#222');
+    }
 
-    const cGroup = svg.append('g');
-    this.estimateGroup = svg.append('g');
-    this.estimatePath = this.estimateGroup.append('path').attr('stroke', 'green').style('fill', 'rgba(2, 2, 2, 0)');
-    this.estimateIndicator = this.estimateGroup.append('circle').style('fill', BLUE).attr('r', 0);
-    this.estimateIndicatorLine = this.estimateGroup.append('line').style('stroke', BLUE).attr('stroke-dasharray', '5, 5').style('stroke-width', 3).attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y1', 0);
-    this.kernelPath = svg.append('g').append('path').attr('stroke', RED).style('stroke-width', 2)
-    svg = this.svg = cGroup;
-    this.pointMaker = svg.append('circle').attr('r', r + 3).attr('cx', x(0.5)).attr('cy', y(0.5)).style('opacity', 0).style('fill', '#e9e9e9')
+    function bumps(n, m) {
+      var a = [], i;
+      for (i = 0; i < n; ++i) a[i] = 0;
+      for (i = 0; i < m; ++i) bump(a, n);
+      return a;
+    }
+    
+    
 
-    this.setKernel(this.props.kernel);
-    this.kernel = this.kernelFunc(this.props.bandwidth);
-    this.estimator = this.kernelDensityEstimator(this.kernel, x.ticks(40));
-    this.density = [];
-
-    d3.range(350).map(() => this.addPoint(true));
-
-    // this.setStatus('title');
-    // this.addPoint(false);
-    // setTimeout(() => this.addPoint(false), 1000);
   }
 
-  addPoint(skip) {
-    const { svg, x, y, pointMaker, estimatePath,estimateY, height } = this;
-    const nx = randomPrecision(2);
-    const ny = 0.5;
-    points.push(nx);
+  update(props, oldProps) {
 
-    pointCount[nx.toFixed(2)] = (pointCount[nx.toFixed(2)] || 0) + 1;
-    if (skip) {
-      const circle =
-        svg
-        .append('circle')
-        .attr('cx', x(nx))
-        .attr('nx', nx)
-        .style('fill', 'white')
-        .style('stroke', 'black')
-        .attr('cy', y(1) - (2 * (r + 1.5) * pointCount[nx.toFixed(2)]))
-        .attr('r', 0)
-        .style('fill', 'black');
+    // var n = 20, // number of layers
+    //     m = 300, // number of samples per layer
+    //     k = 10; // number of bumps per layer
 
-      circles.push(circle);
-      circle
-        .transition()
-        .duration(750)
-        .delay(pointCount[nx.toFixed(2)] * 75)
-        .style('fill', 'white')
-        .attr('r', r);
-      return;
+    var width = window.innerWidth;
+    var height = width * 0.45;
+
+    // console.log(width);
+
+    function bump(a, n) {
+      var x = 1 / (0.1 + Math.random()),
+          y = 2 * Math.random() - 0.5,
+          z = 10 / (0.1 + Math.random());
+      for (var i = 0; i < n; i++) {
+        var w = (i / n - y) * z;
+        a[i] += x * Math.exp(-w * w);
+      }
     }
-    pointMaker
+
+    function bumps(n, m) {
+      var a = [], i;
+      for (i = 0; i < n; ++i) a[i] = 0;
+      for (i = 0; i < m; ++i) bump(a, n);
+      return a;
+    }
+
+    var x = d3.scaleLinear([0, m - 1], [0, width]);
+    
+    var y = d3.scaleLinear([0, 1], [height, 0]);
+
+    // var z = d3.interpolateCool;
+    // var z = d3.interpolateBuPu;
+    var z = d3.interpolateGreys;
+
+    var area = d3.area()
+      .x((d, i) => x(i))
+      .y0(d => 0.25 * y(d[0]))
+      .y1(d => 0.25 * y(d[1]))
+    
+    console.log(area);
+
+    var stack = d3.stack()
+    .keys(d3.range(n))
+    .offset(d3.stackOffsetWiggle)
+    .order(d3.stackOrderNone)
+
+    function randomize() {
+      const layers = stack(d3.transpose(Array.from({length: n}, () => bumps(m, k))));
+      y.domain([
+        d3.min(layers, l => d3.min(l, d => d[0])),
+        d3.max(layers, l => d3.max(l, d => d[1]))
+      ]);
+      return layers;
+    }
+    
+    this.svg.selectAll("path")
+      .data(randomize)
       .transition()
-      .duration(100)
-      .attr('cx', x(nx))
-      .attr('cy', y(ny))
-      .attr('r', r + 5)
-      .on("end", () => {
-        pointMaker.transition()
-          .duration(250)
-          .attr('r', r + 3);
-
-        const circle = svg
-          .append('circle')
-          .attr('r', 0)
-          .attr('nx', nx)
-          .attr('cx', x(nx))
-          .attr('cy', y(0.5))
-          .style('fill', 'black')
-          .style('stroke', 'black');
-
-        circles.push(circle);
-
-        circle
-          .transition()
-          .duration(250)
-          .attr('r', r)
-          .on('end', () => {
-            circle.transition()
-              .duration(250)
-              .style('fill', this.circleFill ? this.circleFill(circle) : 'white')
-              .attr('cy', y(1) - (2 * (r + 1.5) * pointCount[nx.toFixed(2)]))
-            if (this.repeat) {
-              this.repeatTimeout = setTimeout(() => this.addPoint(skip), this.repeat);
-            }
-          });
-
-          circles.push(circle);
-      });
-
-
-    this.density = this.estimator(points);
-    if (this.showEstimate) {
-      // if (!this.density.length) {
-      // }
-      store.clear();
-      estimatePath
-          .datum(this.density)
-          .style("stroke", "#2800d7")
-          .attr("stroke-width", 3)
-          .attr("stroke-linejoin", "round")
-          .attr("d",  d3.line()
-              .curve(d3.curveBasis)
-              .x(function(d) {
-                // console.log(d);
-                return x(d[0]);
-              })
-              .y(function(d) {
-                store.set(d[0], { y: d[1] });
-                return estimateY(d[1]);
-              }));
-    }
+      .duration(1500)
+      .attr("d", area)
   }
 
-  showCircleDistance(x) {
-    const { kernel, distanceScale } = this;
-    const { k } = this.props;
-
-    requestAnimationFrame(() => {
-      circles.forEach((c) => {
-        c.style('fill',
-          distanceScale(kernel((x - +c.attr('nx'))))
-        );
-      })
-      this.circleFill = (c) => () => distanceScale(kernel((x - +c.attr('nx'))));
-    })
-  }
-
-  drawKernel(nx) {
-    const { x, kernelScale, kernel, kernelPath, kernelGroup, k } = this;
-    const points = [];
-    d3.range(-0.15, .15, 0.001).map((d) => {
-      points.push(d);
-      // kernelGroup.append('circle')
-      //   .attr('cx', x(nx + d))
-      //   .attr('cy', kernelScale(kernel(d)))
-      //   .attr('fill', 'red')
-      //   .attr('r', 2);
-    })
-
-    kernelPath
-      .datum(points)
-      .attr("stroke-linejoin", "round")
-      .attr('fill', 'none')
-      .attr("d",  d3.line()
-          // .curve(d3.curveBasis)
-          .x(function(d) {
-            return x(nx + d);
-          })
-          .y(function(d) {
-            return kernelScale(kernel(d));
-          })
-        )
-  }
-
-  updateEstimateLine(nx) {
-
-    console.log('updating estimate line');
-    const { x, estimateY, indicatorScale } = this;
-    const sy = store.sample(nx).y;
-    this.estimateIndicator.attr('r', indicatorScale(sy)).attr('cx', x(nx)).attr('cy', estimateY(sy));
-    this.estimateIndicatorLine
-      // .attr('r', indicatorScale(sy))
-      .attr('x1', x(nx))
-      .attr('x2', x(nx))
-      .attr('y1', estimateY(0))
-      .attr('y2', estimateY(sy));
-  }
-
-  setStatus(newStatus, lastStatus) {
-    const { svg, x, y, pointMaker, estimateY, estimatePath, indicatorScale, estimateIndicatorLine } = this;
-    console.log('setting status: ', newStatus, lastStatus);
-    switch(newStatus) {
-      case 'title':
-        this.repeat = 5000;
-        break;
-      case 'start-drop':
-        this.repeat = 500;
-        this.showEstimate = false;
-        break;
-      case 'show-generator':
-        pointMaker.style('opacity', 1)
-        this.repeat = 100;
-        this.showEstimate = false;
-        break;
-      case 'show-estimate':
-        pointMaker.style('opacity', 1)
-        this.repeat = 100;
-        this.hasShownEstimate = true;
-        this.showEstimate = true;
-        break;
-      case 'build-estimate':
-        pointMaker.style('opacity', 1)
-        this.repeat = 100;
-        this.showEstimate = true;
-        this.fullSVG.style('cursor', 'crosshair');
-        // pointMaker.style('opacity', 0);
-        // this.showCircleDistance(0.8);
-        const nx = this.nx = 0.8;
-        this.showCircleDistance(nx);
-        this.drawKernel(nx);
-        this.updateEstimateLine(nx)
-        this.fullSVG.on('mousemove', () => {
-          if (this.fixPosition) {
-            return;
-          }
-          const nx = this.nx = x.invert(d3.event.pageX);
-          this.showCircleDistance(nx);
-          this.drawKernel(nx);
-          this.updateEstimateLine(nx);
-        })
-        // this.estimatePath.on('mousemove', () => {
-        //   const nx = this.nx = x.invert(d3.event.pageX);
-        //   this.showCircleDistance(nx);
-        // })
-        // this.estimatePath.on('mouseout', () => {
-        //   circles.forEach((c) => {
-        //     c.style('fill', '#fff');
-        //   })
-        // })
-        break;
-      default:
-        break;
-    }
-    if (!this.repeatTimeout) {
-      this.addPoint();
-    }
-  }
-
-  setKernel(kernel) {
-    console.log('SETTING K ', kernel);
-    switch(kernel) {
-      case "epanechnikov":
-        this.kernelFunc = this.kernelEpanechnikov
-        this.estimateY.domain([0, 2 * 10 / this.props.amplitude]);
-        this.kernelScale.domain([0, 10 * 10 / this.props.amplitude]);
-        this.distanceScale.domain([0, 15]);
-        break;
-      case "uniform":
-        this.kernelFunc = this.kernelUniform
-        this.estimateY.domain([0, 1 / this.props.amplitude]);
-        this.kernelScale.domain([0, 10 / this.props.amplitude]);
-        this.distanceScale.domain([0, 0.33]);
-        break;
-      case "triangular":
-        this.kernelFunc = this.kernelTriangular
-        this.estimateY.domain([0, 1 / this.props.amplitude]);
-        this.kernelScale.domain([0, 10 / this.props.amplitude]);
-        this.distanceScale.domain([0, 0.33]);
-        break;
-      case "normal":
-        this.kernelFunc = this.kernelGaussian
-        this.estimateY.domain([0, 1 / this.props.amplitude]);
-        this.kernelScale.domain([0, 10 / this.props.amplitude]);
-        this.distanceScale.domain([0, 0.33]);
-        break;
-      default:
-        break;
-    }
-  }
-
-  update(props) {
-    const { svg, x, y, estimateY, estimatePath } = this;
-    console.log(props.kernel)
-    if (this.props.kernel !== props.kernel || this.props.amplitude !== props.amplitude) {
-      console.log('updating kernel');
-      this.setKernel(props.kernel);
-    }
-    if (this.props.bandwidth !== props.bandwidth || this.props.kernel !== props.kernel || this.props.amplitude !== props.amplitude || this.props.state !== props.state) {
-      console.log('props.bandwidth', props.bandwidth);
-      this.kernel = this.kernelFunc(props.bandwidth);
-      this.estimator = this.kernelDensityEstimator(this.kernel, x.ticks(100));
-      // console.log(points);
-      this.density = this.estimator(points);
-      if (props.state === 'build-estimate') {
-        this.drawKernel(this.nx);
-        this.updateEstimateLine(this.nx)
-        this.showCircleDistance(this.nx);
-      }
-      store.clear();
-      // console.log(this.estimateY.range())
-      // console.log(this.density);
-      if (this.showEstimate) {
-          estimatePath
-            .datum(this.density)
-            .style("stroke", "#2800d7")
-            .attr("stroke-width", 3)
-            .attr("stroke-linejoin", "round")
-            .attr("d",  d3.line()
-                .curve(d3.curveBasis)
-                .x(function(d) {
-                  // console.log(d);
-                  return x(d[0]);
-                })
-                .y(function(d) {
-                  console.log(d[0], d[1]);
-                  store.set(d[0], { y: d[1] });
-                  return estimateY(d[1]);
-                }));
-      }
-    }
-    if (props.state !== this.props.state) {
-      this.setStatus(props.state, this.props.state);
-    }
-  }
 }
-
-module.exports = CustomD3Component;
-
 
 export default CustomD3Component;

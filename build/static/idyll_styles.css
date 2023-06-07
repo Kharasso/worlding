@@ -1387,8 +1387,8 @@ p {
     max-width: 57vw;
   }
   .d3-component-container {
-    height: 31vw;
-    width: 31vw;
-    margin-left: 65vw;
+    /* height: 20vw;
+    width: 20vw; */
+    margin-left: 0vw;
   }
 }

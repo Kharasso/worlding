@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "curve-store": "^1.1.2",
-    "d3": "^4.13.0",
+    "d3": "5.16",
     "d3-selection": "^2.0.0",
     "d3-transition": "^2.0.0",
     "gaussian": "^1.1.0",
