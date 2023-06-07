@@ -2,168 +2,163 @@
 
 [Header
   fullWidth:true
-  title:"Wip"
-  subtitle:"Welcome to Idyll. Open index.idyll to start writing"
-  author:"Your Name Here"
-  authorLink:"https://idyll-lang.org"
-  date:"Jun 4, 2023"
+  title:"Anankhotopia"
+  author:"airlay88@gmail.com"
+  authorLink:"airlay88@gmail.com"
+  subtitle:"“It is said that roughly 10 days north of the river source lies the idyllic settlement of Anankhotopia, where the toil of the trek through the harsh landscape of the borderlands finally concludes.”"
   background:"#222222"
   color:"#ffffff"
    /]
 
 ## Introduction
 
-This is an Idyll scrolly-telling post. It is generated via
-the file `index.idyll`. To compile this post using
-idyll, run the command `idyll` inside of this directory.
-
-Idyll posts are designed to support interaction and
-data-driven graphics.
-
-Configuration can be done via the `idyll` field in `package.json`.
+Anankhotopia (Αν-αγχω-τοπια), "the land without anxiety”, is a carefully engineered gateway settlement on the borderland built upon the advancement of smart city technology of the mid-21st century.
+ It incorporates a sophisticated network that processes the sentiment information flowing through its communities. Using AI and neuro-technology, it refactors the sentiment information, suppressing the negatives while promoting the positives. 
+ The places inside the settlement - the residential units, the offices, and the public areas, are all equipped with sentiment sensors, which construct emotional profiles of the occupants and tune the micro-environment, the temperature, the lighting, 
+ the humidity, the smell, etc., to uplift the occupants’ spirits. The net effect of such a network within Anankhotopia is, as its name suggests, the diminution of the painful memories, anxiety, 
+ and stress experienced by newly arrived immigrants on their way out of a drastically changed landscape on the borderland that has become increasingly fragile and hostile.
 
 [var name:"state" value:0 /]
+[var name:"state" value:"title" /]
+[var name:"bandwidth" value:0.05 /]
+[var name:"kernel" value:"epanechnikov" /]
+[var name:"amplitude" value:3.0 /]
 
 [Scroller currentStep:state]
 
   [Graphic className:"d3-component-container"]
-    [CustomD3Component className:"d3-component" state:`state+1` /]
+    [CustomD3Component state:state bandwidth:bandwidth kernel:kernel amplitude:amplitude /]
   [/Graphic]
 
   [Step]
+    ## I. A Changed Borderland
+    [img src: `"static/images/map.png"`/]
 
-    ## Markup
-
-    Idyll is based on Markdown.
-
-    You can use familiar syntax
-    to create **bold** (`**bold**` ) and *italic* (`*italic*` ) styles,
-
-* lists
-* of
-* items,
-
-    ```
-    * lists
-    * of
-    * items,
-    ```
-
-1. and numbered
-2. lists
-3. of items,
-
-
-    ```
-    1. and numbered
-    2. lists
-    3. of items,
-    ```
-
-    in addition to [hyperlinks](https://idyll-lang.org) and images:
-
-    ![quill](static/images/quill.svg)
-
-    ```
-    ![quill](static/images/quill.svg)
-    ```
-  [/Step]
-
-  [Step]
-    ## Components
-
-    Components can be embedded using a bracket syntax:
-
-    ```
-    [Range /]
-    ```
-
-    and can contain nested content:
-
-    ```
-    [Equation]e = mc^{2}[/Equation]
-    ```
-
-    Components accept properties:
-
-    ```
-    [Range value:x min:0 max:1 /]
-    ```
-
-    that can be bound to variables to achieve interactivity (more in next section).
-
-
-    A variety of components are included by default. See [all the available components](https://idyll-lang.org/docs/components/). You can also use any html tag, for example: `[div] A div! [/div]`.
-
-    To create your own, add it to the `components/` folder. There are examples of how to use Idyll with React and D3 based components already included.
+    [br/]
+    We are now in the not so distant future, where the landscape is drastically different from the one we were used to. The zones around the 30th parallel are particularly vulnerable and volatile that extreme drought and flood have become the norm.
+    While our wealthy and tech savvy neighbor has the resources and technologies to turn these changes to their favor to some extent, we are left with a hostile landscape. The disparity between the ones who own resources and the ones who don't own things has, unfortunately, 
+    been exacerbated by the changed climate.
 
   [/Step]
 
   [Step]
-    ## Interactivity
+    ## II. A Changed Threshold
+    [img src: `"static/images/disaster1.png"`/]
+    [br/]
+    Life is increasingly stressful in these shores. Many of us dream of getting to the other side of the border. We have all heard of the promised land of Anankhotopia. We have seen it on the Televsion with our own eyes. 
+    However, it is harder to get to the other side of the border now. Just like what they joke about.
 
-    Here is how you can instantiate a variable and bind it to a component:
+    [br/]
+    "The climate has raised the bar for us."
+    [br/]
+    [br/]
 
-    [var name:"exampleVar" value:5 /]
+    [img src: `"static/images/disaster2.png"`/]
+    [br/]
+    It is said that roughly 10 days north of the river source lies the idyllic settlement of Anankhotopia, where the toil of the trek through the harsh landscape of the borderlands finally concludes. 
+    We traverse the rough roads like what happened in the old days, but the trek is much more difficult. The unpredictable sandstorm has become so frequent and the landscape has become more unstable. We lose people that we start the journey with and we risk losing ourselves, 
+    one way or another. We have to take this as a pilgrimage so as to make it to the end. Now I think what they always say is quite right.
 
-    [Range min:0 max:10 value:exampleVar /]
-    [Display value:exampleVar /]
-
-    ```
-    [var name:"exampleVar" value:5 /]
-
-    [Range min:0 max:10 value:exampleVar /]
-    [Display value:exampleVar /]
-    ```
+    [br/]
+    "It is Anankhotopia that reaches you, not you who reach Anankhotopia."
   [/Step]
+
+  [Step]
+    ## III. Eisodos
+    [img src: `"static/images/anankho2.png"`/]
+    [br/]
+    But Anankhotopia did reach to us in the end, after around 10 days. Eisodos is what they call the entering of the city and I am one of the lucky folks who made it to their Eisodos.
+    We have all heard of what it has to offer - a way out of our past. We all saw the powerful neural system that cures you of your stress before you crossed the border. This is what they say.
+
+    [br/]
+    "You can pass the border controls, but your anxiety and painful memories won't. The negative emotions are inspected and deported back to where they are from."
+  [/Step]
+  
+  [Step]
+    ## IV. Anxiety
+    [img src: `"static/images/im3.jpg"`/]
+    [br/]
+    So then I will wait for this network to exert its influence on me. As of now, if I dig into myself, I can map a whole series of incarnations of anxieties in my brain.
+    [br/]
+    [br/]
+    [img src: `"static/images/im4.jpg"`/]
+    [br/]
+    10 is a rough number. Even 10 days on foot like this was hard to put up with, never mind before we reached here we all knew that 10 is a rough number. I was having nightmares of someone taking a marine route. I have heard those stories that usually happen further east.
+    I am not sure why I dreamed of that. Maybe in extreme drought you start to fear the brine water.
+  [/Step]
+
+
+  [Step]
+    ## V. The Network
+    Let those maps of negative emotions be inhibited in the nodes so that they don't get passed further down.
+    Let those nodes cultivate an environment with the right temperature, humidity, smell, vegetations, lighting, so that they also cultivate positive emotions in you.
+    [br/]
+    [br/]
+    [img src: `"static/images/net1.jpg"`/]
+    [br/]
+    "We live in an increasingly fragile world and coping with the external environment is a strenuous task to take. Some of us thus turned our attentions to our internal landscape, our mind and spirit, our mental state. 
+    Our internal world is a reflection of the external and its topography changes as the external world changes. For all these years, we have been in search of an elixir for happiness, the magical potion to cure us of mental issues, so 
+    that we can cope with the ever more entangled inner world in a changed climate."
+    [br/]
+    [br/]
+    [img src: `"static/images/net2.jpg"`/]
+    [br/]
+    "We found the answers within ourselves - the perfect design is within our own brains. All those connections, thousands, millions of connections, which individually doesn't mean anything, when linked all together, trigger memories,
+     emotions, feelings, sensations, movements, a whole orchestrated pattern, which, if looked at from a distance seems chaotic, but when zoomed in close enough, reveals the order of things. Here we found the perfect design, 
+     the design that will make life more pleasant and the world a more enjoyable place to live. We call the nodes in this design “THE CLEFTS”. When we look at neurons, they communicate with each other but they are not physically connected.
+     There is a space in between, a space that is filled with chemicals, hormones, and channels. The magical mechanism that work in these clefts controls all aspects of our senses, the way we perceive the world, how we feel, how we move. 
+     The urban infrastructure that uplifts the spirit of the whole city follows such a design, a design we found within ourselves.
+    "
+    [br/]
+  [/Step]
+
+  [Step]
+    ## VI. Anankhotopia
+    [img src: `"static/images/network.png"`/]
+    [br/]
+    In less than a month, I feel totally refreshed and am upbeat most of the time. I am ready to step out of my assigned unit and go out to explore the different zones of the city and start to look for a job and begin my new life on this side of the border.
+    I read that the city has four main districts, each of them having some dedicated functions.
+    [br/]
+    [br/]
+    [ol]
+      [li]Sinemetu - the residential zone[/li]
+      [li]Sans-souci - the business district[/li]
+      [li]Buitenzorg - the central power plant that monitors the sentiment control network[/li]
+      [li]Carefreeteria - the public spaces and parks of the city[/li]
+    [/ol]
+
+  [/Step]
+
+
+  [Step]
+    ## VII. Beyond Anxiety
+    [img src: `"static/images/interior1.png"`/]
+    [br/]
+    Back to my room. Today the lights are in a warmer hue. Maybe the node has sensed that I need a softer ambient at home? There is also a decent scent in the room. I am not able to tell exactly what plant this smell is mimicking. Maybe it's the flower of sweet olive.
+
+    [br/]
+    [br/]
+    [img src: `"static/images/interior2.png"`/]
+    [br/]
+    Downstairs in the botanical garden of the community, the lighting is a little reddish and I can feel the air mildly humidified. It is a really relaxing walk around the space. A moment ago, I got a message telling me that I have new mails, so I decide to pay a visit to the
+    mail room now.
+
+  [/Step]
+
+
+  [Step]
+    ## 0. The Mails
+    The mailroom personnel gently handed me a packet of 3 envelops. What are they? Wait. They look like utility bills.
+    [br/]
+    [br/]
+    [img src: `"static/images/utility.jpg"`/]
+    [br/]
+    I haven't even started to make a living yet. How am I supposed to pay?
+  [/Step]
+
+
 
 [/Scroller]
 
-[Scroller]
-
-  [Step]
-
-    ##Scroller
-
-    The `Scroller` component is used to create scroll-based presentations. It can be used to create scrollytelling articles similar to this.
-    It takes a property `currentStep` which is updated when the user scrolls to a different step.
-
-    A persistent graphic may also provided using the `Graphic` component in order to create visualizations.
-
-  [/Step]
-
-  [Step]
-
-    ## Learn More
-
-    To learn more see the documentation at [https://idyll-lang.org/docs/](https://idyll-lang.org/docs/),
-    join our [chatroom](https://gitter.im/idyll-lang/Lobby), or see the project on [GitHub](https://github.com/idyll-lang/idyll).
-  [hr /]
-
-  [/Step]
-
-[/Scroller]
 
 [br/]
-# Technical Details
-
-## Installation
-
-- Make sure you have `idyll` installed (`npm i -g idyll`).
-- Clone this repo and run `npm install`.
-
-## Developing a post locally
-
-Run `idyll`.
-
-## Building a post for production
-
-Run `idyll build`. The output will appear in the top-level `build` folder. To change the output location, change the `output` option in `package.json`.
-
-## Deploying
-
-Make sure your post has been built, then deploy the docs folder via any static hosting service.
-
-## Dependencies
-
-You can install custom dependencies by running `npm install <package-name> --save`. Note that any collaborators will also need download the package locally by running `npm install` after pulling the changes.
